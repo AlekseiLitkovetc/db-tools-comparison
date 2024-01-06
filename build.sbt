@@ -8,5 +8,6 @@ lazy val root = project
   .settings()
   .settings(
     libraryDependencies += catsEffect,
-    libraryDependencies += skunk
+    libraryDependencies += skunk,
+    libraryDependencies += fs2
   )
