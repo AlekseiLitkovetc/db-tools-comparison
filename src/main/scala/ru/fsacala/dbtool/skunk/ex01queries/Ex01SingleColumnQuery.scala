@@ -1,6 +1,7 @@
-package ru.fsacala.dbtool.skunk
+package ru.fsacala.dbtool.skunk.ex01queries
 
 import cats.effect.*
+import ru.fsacala.dbtool.skunk.sessionResource
 import skunk.*
 import skunk.codec.all.*
 import skunk.implicits.*

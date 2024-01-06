@@ -1,10 +1,11 @@
-package ru.fsacala.dbtool.skunk
+package ru.fsacala.dbtool.skunk.ex01queries
 
 import cats.effect.*
+import fs2.Stream
+import ru.fsacala.dbtool.skunk.sessionResource
 import skunk.*
 import skunk.codec.all.*
 import skunk.implicits.*
-import fs2.Stream
 
 object Ex03ParameterisedQuery extends IOApp {
 
