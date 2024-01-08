@@ -67,6 +67,14 @@ For compile-time benchmarks, I am going to count and play with these parameters:
 * different DB tools - Doobie (considering different jdbc drivers) vs Skunk;
 * different query tests/examples (considering corner cases with empty queries), including ltrees;
 
+At this moment, there is only one sample - [Hello World](./db-benchmarks/src/main/scala/ru/fscala/dbtool/JMHSample_01_HelloWorld.scala) benchmark.
+The other expected benchmarks will be added a bit later.
+
+As for now, in demonstration purposes, to run the "Hello World" benchmark use the following command:
+```shell
+sbt 'db-benchmarks/Jmh/run -i 1 -wi 1 -f 1 -rf csv .*Hello.*'
+```
+
 ## Example project
 There is an example project for Skunk and Doobie - https://github.com/AlekseiLitkovetc/db-tools-comparison
 
