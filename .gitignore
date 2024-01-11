@@ -1,3 +1,9 @@
 .bsp
 .idea
+.vscode
+.metals
+**/.bloop
 target
+jmh*\.csv
+project/metals.sbt
+project/project
