@@ -91,7 +91,77 @@ There is an example project for Skunk and Doobie - <https://github.com/AlekseiLi
 
 TBD:
 
+* [ ] Compare basic syntax Doobie vs Skunk;
 * [x] Add query examples for Skunk and investigate its API;
 * [ ] Add similar examples for Doobie;
-* [ ] Do exercises from the Skunk tutorial <https://typelevel.org/skunk/tutorial/> and check how errors are logged;
+* [x] Do exercises from the Skunk tutorial <https://typelevel.org/skunk/tutorial/> and check how errors are logged;
 * [ ] After that, do the same with Doobie and check its error logging logic (does it exist?);
+* [ ] Compare update many from Doobie vs Skunk (does Skunk allow to make a SQL injection?);
+* [ ] Compare Doobie approach for connection pool vs Skunk (does it have it?);
+
+### Skunk runtime errors
+
+Play with the code block in [Experiments.scala](./db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiments.scala#L52) - `experiment02` to face with errors like these (or others):
+
+<!-- markdownlint-disable MD033 -->
+<details>
+  <summary>[error] Exactly one row was expected, but more were returned</summary>
+  
+  ```text
+  [error] skunk.exception.SkunkException:
+  [error] 🔥  
+  [error] 🔥  Skunk encountered a problem related to use of unique
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiment.scala:71
+  [error] 🔥  
+  [error] 🔥    Problem: Exactly one row was expected, but more were returned.
+  [error] 🔥       Hint: You used unique. Did you mean to use stream?
+  [error] 🔥  
+  [error] 🔥  The statement under consideration was defined
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiment.scala:62
+  [error] 🔥  
+  [error] 🔥    SELECT name, population
+  [error] 🔥    FROM   country
+  [error] 🔥    WHERE  name LIKE $1
+  [error] 🔥  
+  [error] 🔥  and the arguments were provided
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiment.scala:71
+  [error] 🔥  
+  [error] 🔥    $1 varchar    U%
+  [error] 🔥  
+  [error] skunk.exception.SkunkException: Exactly one row was expected, but more were returned.
+  ```
+
+</details>
+
+<details>
+  <summary>[error] Expected at most one result, more returned</summary>
+  
+  ```text
+  [error] skunk.exception.SkunkException: 
+  [error] 🔥  
+  [error] 🔥  Skunk encountered a problem related to use of option
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiments.scala:72
+  [error] 🔥  
+  [error] 🔥    Problem: Expected at most one result, more returned.
+  [error] 🔥       Hint: Did you mean to use stream?
+  [error] 🔥  
+  [error] 🔥  The statement under consideration was defined
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiments.scala:62
+  [error] 🔥  
+  [error] 🔥    SELECT name, population
+  [error] 🔥    FROM   country
+  [error] 🔥    WHERE  name LIKE $1
+  [error] 🔥  
+  [error] 🔥  and the arguments were provided
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiments.scala:72
+  [error] 🔥  
+  [error] 🔥    $1 varchar    U%
+  [error] 🔥  
+  [error] skunk.exception.SkunkException: Expected at most one result, more returned.
+  ```
+
+</details>
+<br/>
+<!-- markdownlint-enable MD033 -->
+
+These errors look exhaustive. A description contains a problem and even suggestions (hints) for fixing it.
