@@ -16,10 +16,30 @@ So, in order to do it, I am going to cover the following points:
 
 ## JDBC vs pure PostgreSQL protocol
 
+Doobie is a pure functional JDBC library. This is a great library but it still has some minuses:
+
+* Using JDBC;
+* Bad diagnostics (partly due to JDBC, partly due to Doobie);
+* Auto-derivation of row codecs is probably bad - takes a long time to derive things we want;
+
+Skunk tries to solve these problems for PostgreSQL database:
+
+* Speals the wire protocol directly (no driver, no indirection);
+* Completly non-blocking (we don't have to worry about thread pools). All message handling is asynchronous;
+* API mirrors the operational semantics of Postgres;
+* Beautiful and comprehensive error reporting;
+* Build with cats, cats-effect, fs2, scodec;
+
+### Talking with PostgreSQL
+
+![Talking_with_PostgreSQL](./images/Talking_with_PostgreSQL.png)
+
+And it's documented in PostgreSQL documentation - [Chapter 55. Frontend/Backend Protocol](https://www.postgresql.org/docs/current/protocol.html)
+
 TBD
 
 * [ ] Rob Norris [talk](https://www.youtube.com/watch?v=NJrgj1vQeAI) on Scala Days 2019 about Skunk
-  * [ ] Add link on PostgreSQL doc about pure protocol;
+  * [x] Add link on PostgreSQL doc about pure protocol;
 * [ ] Check out materials about Skunk in the book [Practical FP in Scala](https://leanpub.com/pfp-scala) by [Gabriel Volpe](https://twitter.com/volpegabriel87).
 
 Check out these links found on the internet while searching Skunk vs Doobie:
