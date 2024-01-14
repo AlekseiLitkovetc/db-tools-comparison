@@ -1,7 +1,7 @@
 import Dependencies.*
 
 ThisBuild / scalaVersion := "3.3.1"
-ThisBuild / version      := "0.1.0-SNAPSHOT"
+ThisBuild / version := "0.1.0-SNAPSHOT"
 
 ThisBuild / Compile / run / fork := true
 
@@ -24,4 +24,13 @@ lazy val benchmarks = project
     libraryDependencies += skunk,
     libraryDependencies ++= doobie,
     libraryDependencies += fs2
+  )
+
+lazy val root = project
+  .in(file("hierarchy"))
+  .withId("hierarchy")
+  .settings(
+    libraryDependencies += catsEffect,
+    libraryDependencies += skunk,
+    libraryDependencies ++= doobie
   )
