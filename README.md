@@ -1,4 +1,5 @@
 # DB tools comparison
+<!-- markdownlint-disable MD033 -->
 
 Let's compare [Skunk](https://typelevel.org/skunk/) vs [Doobie](https://tpolecat.github.io/doobie/) db tools for Scala.
 
@@ -32,14 +33,38 @@ Skunk tries to solve these problems for PostgreSQL database:
 
 ### Talking with PostgreSQL
 
-![Talking_with_PostgreSQL](./images/Talking_with_PostgreSQL.png)
+Communication with PostgreSQL happens via a TCP Socket connection by exchanging byte array messages:
+
+<img src="./images/Talking_with_PostgreSQL.png" alt="Talking with PostgreSQL" width="40%" height="40%"/>
 
 And it's documented in PostgreSQL documentation - [Chapter 55. Frontend/Backend Protocol](https://www.postgresql.org/docs/current/protocol.html)
 
+So, after reading the PostgreSQL documantation, if we try to implement communication with DB without JDBC, we probably go through the following steps:
+
+1. Get a tool for communication via TCP by socket - [fs2.io.tcp.Socket](https://www.javadoc.io/doc/co.fs2/fs2-io_3/latest/index.html);
+2. To read and write raw data (bytes) from PostgreSQL, implement a BitVectorSocket (use scodec for conversions);
+3. Implement logic for reading different types of messages from PostgreSQL
+   message = tag (1 byte) + length (4 bytes) + payload (<lenght> - 4 bytes)
+4. Test implementation - start communication with PostgreSQL with a StartUp message (in order to get a DB session);
+5. Go to the next abstraction level - implement `MessageSocket` ([skunk.net.MessageSocket](https://www.javadoc.io/doc/org.tpolecat/skunk-core_3/latest/index.html)) that speaks in terms of PostgreSQL messages;
+
+At the end of implementation, a stack will look like this:
+
+<img src="./images/Full_basic_stack_of_Skunk.png" alt="Full stack" width="25%" height="25%"/>
+
+### End User API
+
 TBD
 
-* [ ] Rob Norris [talk](https://www.youtube.com/watch?v=NJrgj1vQeAI) on Scala Days 2019 about Skunk
-  * [x] Add link on PostgreSQL doc about pure protocol;
+* [ ] Add a couple of demo examples;
+* [ ] Mention and demonstrate ltree schema type;
+
+<font size = "2">This section is based on Rob Norris [talk](https://www.youtube.com/watch?v=NJrgj1vQeAI) on Scala Days 2019 about Skunk</font>
+
+---
+
+TBD
+
 * [ ] Check out materials about Skunk in the book [Practical FP in Scala](https://leanpub.com/pfp-scala) by [Gabriel Volpe](https://twitter.com/volpegabriel87).
 
 Check out these links found on the internet while searching Skunk vs Doobie:
@@ -123,7 +148,6 @@ TBD:
 
 Play with the code block in [Experiments.scala](./db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiments.scala#L52) - `experiment02` to face with errors like these (or others):
 
-<!-- markdownlint-disable MD033 -->
 <details>
   <summary>[error] Exactly one row was expected, but more were returned</summary>
   
@@ -164,7 +188,8 @@ Play with the code block in [Experiments.scala](./db-examples/src/main/scala/ru/
   [error] 🔥  
   [error] 🔥    Problem: Expected at most one result, more returned.
   [error] 🔥       Hint: Did you mean to use stream?
-  [error] 🔥  
+  [error] 🔥  <!-- markdownlint-disable MD033 -->
+
   [error] 🔥  The statement under consideration was defined
   [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiments.scala:62
   [error] 🔥  
@@ -182,6 +207,5 @@ Play with the code block in [Experiments.scala](./db-examples/src/main/scala/ru/
 
 </details>
 <br/>
-<!-- markdownlint-enable MD033 -->
 
 These errors look exhaustive. A description contains a problem and even suggestions (hints) for fixing it.
