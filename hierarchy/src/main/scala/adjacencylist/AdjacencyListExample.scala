@@ -24,7 +24,7 @@ object AdjacencyListExample extends IOApp {
       res    <- fa
       finish <- IO.monotonic
       millis  = (finish - start).toMillis
-      _       = println(s"$name:$millis millis")
+      _      <- IO.println(s"$name:$millis millis")
     } yield res
 
   private case class RankIdRange(start: Int, end: Int)
@@ -95,6 +95,7 @@ object AdjacencyListExample extends IOApp {
     * 🔥 Hint: Postgres can't handle this many parameters. Execute multiple statements instead.
     * 🔥
     */
+  // units.size is 1 000 000
   private def insertArmySkunk(units: List[AdjacencyListUnit]): IO[Unit] = sessionResource.use { skunkSession =>
     val enc     = (int4 *: varchar *: varchar *: int4.opt).to[AdjacencyListUnit].values.list(units)
     val command =
@@ -102,7 +103,7 @@ object AdjacencyListExample extends IOApp {
     skunkSession.prepare(command).flatMap(ps => ps.execute(units)).void
   }
 
-  //  (8191*4)<=32676
+  //  (8191*4)<=32767
   private def insertArmySkunkChunked(): IO[Unit] =
     army.sliding(8191, 8191).toList.traverse(ch => insertArmySkunk(ch)).void
 
@@ -110,9 +111,20 @@ object AdjacencyListExample extends IOApp {
 
   private def skunkMobilization: IO[Unit] = printMeasure(insertArmySkunkChunked(), "insertArmySkunk")
 
+  private def skunkInsert3Columns(data: List[(String, String, String)]): IO[Unit] = sessionResource.use {
+    skunkSession =>
+      val enc     = (varchar *: varchar *: varchar).to[(String, String, String)].values.list(data)
+      val command =
+        sql"insert into hierarchy.table_with_three_columns (column_one, column_two, column_three) values $enc".command
+      skunkSession.prepare(command).flatMap(ps => ps.execute(data)).void
+  }
+
+  private def getMaxBatchSize(nColumns: Int): Int = 32767 / nColumns
+
   override def run(args: List[String]): IO[ExitCode] = for {
-    _ <- doobieMobilization
-    _ <- skunkMobilization
+//    _ <- doobieMobilization
+//    _ <- skunkMobilization
+    _ <- skunkInsert3Columns(List.fill(getMaxBatchSize(3))(("value_one", "value_two", "value_three")))
   } yield ExitCode.Success
 
 }
