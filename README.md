@@ -21,7 +21,8 @@ Doobie is a pure functional JDBC library. This is a great library but it still h
 
 * Using JDBC;
 * Bad diagnostics (partly due to JDBC, partly due to Doobie);
-* Auto-derivation of row codecs is probably bad - takes a long time to derive things we want;
+* Auto-derivation of row codecs is probably bad - takes a long time to derive things we want
+  * [ ] I've heard that Doobie with Scala 3 does a better autoderivation - check it!;
 
 Skunk tries to solve these problems for PostgreSQL database:
 
