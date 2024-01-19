@@ -12,3 +12,14 @@ val sessionResource: Resource[IO, Session[IO]] =
     database = "frm-comparison-db",
     password = Some("password")
   )
+
+val sessionPool: Resource[IO, Resource[IO, Session[IO]]] =
+  Session
+    .pooled[IO](
+      host = "localhost",
+      port = 5433,
+      user = "postgres",
+      database = "frm-comparison-db",
+      password = Some("my-pass"),
+      max = 10
+    )
