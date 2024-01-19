@@ -21,5 +21,6 @@ lazy val benchmarks = project
   .settings(
     libraryDependencies += catsEffect,
     libraryDependencies += skunk,
+    libraryDependencies ++= doobie,
     libraryDependencies += fs2
   )
