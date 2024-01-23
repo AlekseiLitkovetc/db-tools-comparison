@@ -1,9 +1,9 @@
-package ru.fsacala.dbtool.skunk.ex03transactions
+package ru.fsacala.dbtool.examples.ex03transactions
 
 import cats.effect.*
 import cats.implicits.*
 import natchez.Trace.Implicits.noop
-import ru.fsacala.dbtool.skunk.sessionResource
+import ru.fsacala.dbtool.examples.sessionResourceSkunk
 import skunk.*
 import skunk.codec.all.*
 import skunk.implicits.*
@@ -53,7 +53,7 @@ object PetService {
 
 }
 
-object TransactionExample extends IOApp {
+object TransactionExample extends IOApp.Simple {
 
   // a resource that creates and drops a temporary table
   def withPetsTable(s: Session[IO]): Resource[IO, Unit] =
@@ -75,7 +75,7 @@ object TransactionExample extends IOApp {
   // A resource that puts it all together.
   val resource: Resource[IO, PetService[IO]] =
     for {
-      s  <- sessionResource
+      s  <- sessionResourceSkunk
       _  <- withPetsTable(s)
       _  <- withTransactionStatusLogger(s)
       ps <- Resource.eval(PetService.fromSession(s))
@@ -90,12 +90,12 @@ object TransactionExample extends IOApp {
   )
 
   // Our entry point
-  def run(args: List[String]): IO[ExitCode] =
+  def run: IO[Unit] =
     resource.use { ps =>
       for {
         _   <- ps.tryInsertAll(pets)
         all <- ps.selectAll
         _   <- all.traverse_(p => IO.println(p))
-      } yield ExitCode.Success
+      } yield ()
     }
 }

@@ -11,6 +11,7 @@ lazy val examples = project
   .settings(
     libraryDependencies += catsEffect,
     libraryDependencies += skunk,
+    libraryDependencies ++= doobie,
     libraryDependencies += fs2
   )
 

@@ -1,13 +1,13 @@
 version: '3.1'
 
 services:
-  frm-comparison-postgres:
+  db-tools-comparison-postgres:
     image: postgres:16.1
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: frm-comparison-db
+      POSTGRES_DB: db-tools-comparison
     ports:
       - "5433:5432"
     volumes:

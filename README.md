@@ -78,6 +78,10 @@ Check out these materials from a DevInsideYou Scala blogger:
 * [ ] <https://youtu.be/J5I_HEUKsF0?si=2-d4PWO9ZhiBPPCH>
 * [ ] <https://youtu.be/kafn3qKd9Pw?si=7rq6qZnrPVe4sXAw>
 
+Check out RockTheJVM article:
+
+* [ ] <https://blog.rockthejvm.com/doobie/>
+
 Think about these questions:
 
 * Why has there been no more info about Skunk since 2021?
@@ -137,17 +141,17 @@ There is an example project for Skunk and Doobie - <https://github.com/AlekseiLi
 
 TBD:
 
-* [ ] Compare basic syntax Doobie vs Skunk;
+* [x] Compare basic syntax Doobie vs Skunk;
 * [x] Add query examples for Skunk and investigate its API;
-* [ ] Add similar examples for Doobie;
+* [x] Add similar examples for Doobie;
 * [x] Do exercises from the Skunk tutorial <https://typelevel.org/skunk/tutorial/> and check how errors are logged;
-* [ ] After that, do the same with Doobie and check its error logging logic (does it exist?);
+* [x] After that, do the same with Doobie and check its error logging logic (does it exist?);
 * [ ] Compare update many from Doobie vs Skunk (does Skunk allow to make a SQL injection?);
 * [ ] Compare Doobie approach for connection pool vs Skunk (does it have it?);
 
 ### Skunk runtime errors
 
-Play with the code block in [Experiments.scala](./db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiments.scala#L52) - `experiment02` to face with errors like these (or others):
+Play with the code block in [Experiments.scala](./db-examples/src/main/scala/ru/fsacala/dbtool/examples/Experiments.scala#L52) - `experiment02` to face with errors like these (or others):
 
 <details>
   <summary>[error] Exactly one row was expected, but more were returned</summary>
@@ -156,20 +160,20 @@ Play with the code block in [Experiments.scala](./db-examples/src/main/scala/ru/
   [error] skunk.exception.SkunkException:
   [error] 🔥  
   [error] 🔥  Skunk encountered a problem related to use of unique
-  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiment.scala:71
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/examples/Experiment.scala:71
   [error] 🔥  
   [error] 🔥    Problem: Exactly one row was expected, but more were returned.
   [error] 🔥       Hint: You used unique. Did you mean to use stream?
   [error] 🔥  
   [error] 🔥  The statement under consideration was defined
-  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiment.scala:62
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/examples/Experiment.scala:62
   [error] 🔥  
   [error] 🔥    SELECT name, population
   [error] 🔥    FROM   country
   [error] 🔥    WHERE  name LIKE $1
   [error] 🔥  
   [error] 🔥  and the arguments were provided
-  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiment.scala:71
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/examples/Experiment.scala:71
   [error] 🔥  
   [error] 🔥    $1 varchar    U%
   [error] 🔥  
@@ -185,21 +189,21 @@ Play with the code block in [Experiments.scala](./db-examples/src/main/scala/ru/
   [error] skunk.exception.SkunkException: 
   [error] 🔥  
   [error] 🔥  Skunk encountered a problem related to use of option
-  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiments.scala:72
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/examples/Experiments.scala:72
   [error] 🔥  
   [error] 🔥    Problem: Expected at most one result, more returned.
   [error] 🔥       Hint: Did you mean to use stream?
   [error] 🔥  <!-- markdownlint-disable MD033 -->
 
   [error] 🔥  The statement under consideration was defined
-  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiments.scala:62
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/examples/Experiments.scala:62
   [error] 🔥  
   [error] 🔥    SELECT name, population
   [error] 🔥    FROM   country
   [error] 🔥    WHERE  name LIKE $1
   [error] 🔥  
   [error] 🔥  and the arguments were provided
-  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/skunk/Experiments.scala:72
+  [error] 🔥    at /home/aleksei/IdeaProjects/db-tools-comparison/db-examples/src/main/scala/ru/fsacala/dbtool/examples/Experiments.scala:72
   [error] 🔥  
   [error] 🔥    $1 varchar    U%
   [error] 🔥  
@@ -210,3 +214,70 @@ Play with the code block in [Experiments.scala](./db-examples/src/main/scala/ru/
 <br/>
 
 These errors look exhaustive. A description contains a problem and even suggestions (hints) for fixing it.
+
+### Doobie runtime error
+
+Let's compare Skunk vs Doobie errors, check out these ones from Doobie for identical queries in [ExperimentDoobieError.scala](./db-examples/src/main/scala/ru/fsacala/dbtool/examples/ExperimentDoobieError.scala#L26):
+
+<details>
+  <summary>[error] Exactly one row was expected, but more were returned (description from Skunk)</summary>
+  
+  ```text
+  [error] doobie.util.invariant$UnexpectedContinuation$: Expected ResultSet exhaustion, but more rows were available.
+  [error]         at doobie.util.invariant$UnexpectedContinuation$.<clinit>(invariant.scala:26)
+  [error]         at doobie.hi.resultset$.getUnique$$anonfun$1(resultset.scala:206)
+  [error]         at cats.free.Free.step(Free.scala:77)
+  [error]         at cats.free.Free.foldMap$$anonfun$1(Free.scala:164)
+  [error]         at cats.data.KleisliFlatMap.tailRecM$$anonfun$1$$anonfun$1(Kleisli.scala:701)
+  [error]         at cats.StackSafeMonad.tailRecM(StackSafeMonad.scala:37)
+  [error]         at cats.StackSafeMonad.tailRecM$(StackSafeMonad.scala:34)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error] Nonzero exit code returned from runner: 1
+  ```
+
+</details>
+
+<details>
+  <summary>[error] Expected at most one result, more returned (description from Skunk)</summary>
+  
+  ```text
+  [error] doobie.util.invariant$UnexpectedContinuation$: Expected ResultSet exhaustion, but more rows were available.
+  [error]         at doobie.util.invariant$UnexpectedContinuation$.<clinit>(invariant.scala:26)
+  [error]         at doobie.hi.resultset$.getOption$$anonfun$1(resultset.scala:218)
+  [error]         at cats.free.Free.step(Free.scala:77)
+  [error]         at cats.free.Free.foldMap$$anonfun$1(Free.scala:164)
+  [error]         at cats.data.KleisliFlatMap.tailRecM$$anonfun$1$$anonfun$1(Kleisli.scala:701)
+  [error]         at cats.StackSafeMonad.tailRecM(StackSafeMonad.scala:37)
+  [error]         at cats.StackSafeMonad.tailRecM$(StackSafeMonad.scala:34)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error]         at tailRecM$$anonfun$1 @ doobie.util.transactor$Transactor$$anon$4.apply$$anonfun$3(transactor.scala:165)
+  [error]         at flatMap @ doobie.WeakAsync$$anon$1.flatMap(WeakAsync.scala:29)
+  [error] Nonzero exit code returned from runner: 1
+  ```
+
+</details>
+<br/>
+
+In comparison with Skunk, Doobie's error description looks poor.

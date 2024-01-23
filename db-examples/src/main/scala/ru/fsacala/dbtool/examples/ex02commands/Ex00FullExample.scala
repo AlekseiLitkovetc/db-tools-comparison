@@ -1,9 +1,9 @@
-package ru.fsacala.dbtool.skunk.ex02commands
+package ru.fsacala.dbtool.examples.ex02commands
 
 import cats.Monad
 import cats.effect.*
 import cats.syntax.all.*
-import ru.fsacala.dbtool.skunk.sessionResource
+import ru.fsacala.dbtool.examples.sessionResourceSkunk
 import skunk.*
 import skunk.codec.all.*
 import skunk.implicits.*
@@ -40,7 +40,7 @@ object PetService {
       def selectAll: F[List[Pet]]        = s.execute(all)
 }
 
-object Ex00FullExample extends IOApp {
+object Ex00FullExample extends IOApp.Simple {
   // a resource that creates and drops a temporary table
   private def withPetsTable(s: Session[IO]): Resource[IO, Unit] =
     val alloc = s.execute(sql"CREATE TEMP TABLE pets (name varchar, age int2)".command).void
@@ -52,8 +52,8 @@ object Ex00FullExample extends IOApp {
   private val beagles = List(Pet("John", 2), Pet("George", 3), Pet("Paul", 6), Pet("Ringo", 3))
 
   // our entry point
-  def run(args: List[String]): IO[ExitCode] =
-    sessionResource
+  def run: IO[Unit] =
+    sessionResourceSkunk
       .flatTap(withPetsTable)
       .map(PetService.fromSession(_))
       .use { s =>
@@ -62,6 +62,6 @@ object Ex00FullExample extends IOApp {
           _  <- s.insert(beagles)
           ps <- s.selectAll
           _  <- ps.traverse(p => IO.println(p))
-        } yield ExitCode.Success
+        } yield ()
       }
 }
