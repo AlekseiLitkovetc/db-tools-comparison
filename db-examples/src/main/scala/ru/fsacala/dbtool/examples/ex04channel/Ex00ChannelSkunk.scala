@@ -10,11 +10,7 @@ import skunk.implicits.*
 
 import java.time.LocalDate
 
-object Ex00Channel extends IOApp.Simple {
-
-  val currentDateQuery: Query[Void, LocalDate] =
-    sql"SELECT current_date"
-      .query(date)
+object Ex00ChannelSkunk extends IOApp.Simple {
 
   private def withTrigger(s: Session[IO]): Resource[IO, Unit] = {
     val createTableCommand =
