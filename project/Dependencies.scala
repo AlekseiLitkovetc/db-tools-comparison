@@ -1,5 +1,5 @@
-import Dependencies.Versions.*
-import sbt.*
+import Dependencies.Versions._
+import sbt._
 
 object Dependencies {
 
@@ -9,6 +9,7 @@ object Dependencies {
     lazy val doobieVersion     = "1.0.0-RC5"
     lazy val fs2Version        = "3.9.3"
     lazy val doobieVersion     = "1.0.0-RC5"
+    lazy val otel4sVerson            = "0.4.0"
   }
 
   lazy val catsEffect = "org.typelevel" %% "cats-effect" % catsEffectVersion
@@ -30,4 +31,6 @@ object Dependencies {
     "org.tpolecat" %% "doobie-postgres",
     "org.tpolecat" %% "doobie-postgres-circe"
   ).map(_ % doobieVersion)
+
+  lazy val otel4s = "org.typelevel" %% "otel4s-java" % otel4sVerson
 }
