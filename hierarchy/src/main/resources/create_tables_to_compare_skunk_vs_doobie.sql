@@ -1,47 +1,47 @@
 -- создадим таблицы,которые используются в AdjacencyListInsert
 
-create table hierarchy.adjacency_list_hierarchy_doobie
+create table adjacency_list_hierarchy_doobie
 (
     id        integer primary key,
     rank      varchar,
-    name      varchar,
-    parent_id integer references hierarchy.adjacency_list_hierarchy_doobie (id)
+    name      varchar unique,
+    parent_id integer references adjacency_list_hierarchy_doobie (id)
 );
 
-create index on hierarchy.adjacency_list_hierarchy_doobie (parent_id);
+create index on adjacency_list_hierarchy_doobie (parent_id);
 
 
-create table hierarchy.adjacency_list_hierarchy_skunk
+create table adjacency_list_hierarchy_skunk
 (
     id        integer primary key,
     rank      varchar,
-    name      varchar,
-    parent_id integer references hierarchy.adjacency_list_hierarchy_skunk (id)
+    name      varchar unique,
+    parent_id integer references adjacency_list_hierarchy_skunk (id)
 );
 
-create index on hierarchy.adjacency_list_hierarchy_skunk (parent_id);
+create index on adjacency_list_hierarchy_skunk (parent_id);
 
 
 -- создадим таблицы,которые используются в AdjacencyListUpdate
 
-create table hierarchy.ltree_hierarchy_skunk
+create table ltree_hierarchy_skunk
 (
-    id   integer unique,
+    id   integer primary key,
     rank varchar,
     name varchar unique,
     path ltree
 );
 
-create index on hierarchy.ltree_hierarchy_skunk using gist (path);
-create index on hierarchy.ltree_hierarchy_skunk using gist (path);
+create index on ltree_hierarchy_skunk using gist (path);
+create index on ltree_hierarchy_skunk using btree (path);
 
-create table hierarchy.ltree_hierarchy_doobie
+create table ltree_hierarchy_doobie
 (
-    id   integer unique,
+    id   integer primary key,
     rank varchar,
     name varchar unique,
     path ltree
 );
 
-create index on hierarchy.ltree_hierarchy_doobie using gist (path);
-create index on hierarchy.ltree_hierarchy_doobie using gist (path);
+create index on ltree_hierarchy_doobie using gist (path);
+create index on ltree_hierarchy_doobie using btree (path);

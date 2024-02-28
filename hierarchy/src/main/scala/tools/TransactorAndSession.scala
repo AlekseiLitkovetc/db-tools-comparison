@@ -17,8 +17,8 @@ object TransactorAndSession {
   private val host     = "localhost"
   private val port     = 5432
   private val db       = "hierarchy"
-  private val user     = "vsevolod66rus"
-  private val password = "2281488"
+  private val user     = "user"
+  private val password = "pwd"
 
   val transactorResource: Resource[IO, Transactor[IO]] = for {
     connectEC  <- ExecutionContexts.fixedThreadPool[IO](poolSize)
@@ -37,6 +37,6 @@ object TransactorAndSession {
       port = port,
       user = user,
       database = db,
-      password = Some(password),
+      password = Some(password)
     )
 }

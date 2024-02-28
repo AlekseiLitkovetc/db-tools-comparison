@@ -17,19 +17,10 @@ object LtreeGoodExample extends IOApp {
       host = "localhost",
       port = 5432,
       user = "user",
-      database = "db",
+      database = "hierarchy",
       password = Some("pwd"),
       strategy = Strategy.SearchPath //без этого ltree не работает!
     )
-
-  private def selectLtreeUnit(): IO[Unit] =
-    sessionResourceWithStrategy.use { skunkSession =>
-      val query = sql"select * from hierarchy.ltree_hierarchy where id = 1000001"
-        .query(int4 *: varchar *: varchar *: ltree)
-        .to[LtreeUnitLtree]
-      val resF  = skunkSession.execute(query)
-      resF.map(res => println(s"selected $res"))
-    }
 
   private def insertLtreeUnit(): IO[Unit] =
     sessionResourceWithStrategy.use { skunkSession =>
@@ -43,8 +34,17 @@ object LtreeGoodExample extends IOApp {
 
       val enc     = (int4 *: varchar *: varchar *: ltree).to[LtreeUnitLtree].values.list(units)
       val command =
-        sql"insert into hierarchy.ltree_hierarchy (id, rank, name, path) values $enc".command
+        sql"insert into ltree_hierarchy_skunk (id, rank, name, path) values $enc".command
       skunkSession.prepare(command).flatMap(ps => ps.execute(units)).void
+    }
+
+  private def selectLtreeUnit(): IO[Unit] =
+    sessionResourceWithStrategy.use { skunkSession =>
+      val query = sql"select * from ltree_hierarchy_skunk where id = 1000001"
+        .query(int4 *: varchar *: varchar *: ltree)
+        .to[LtreeUnitLtree]
+      val resF  = skunkSession.execute(query)
+      resF.map(res => println(s"selected $res"))
     }
 
   override def run(args: List[String]): IO[ExitCode] = for {

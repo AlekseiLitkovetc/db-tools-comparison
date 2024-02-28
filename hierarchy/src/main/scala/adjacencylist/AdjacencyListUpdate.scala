@@ -23,13 +23,13 @@ object AdjacencyListUpdate extends IOApp {
     IO.blocking {
       val query =
         sql"""
-           insert into hierarchy.ltree_hierarchy_skunk
+           insert into ltree_hierarchy_skunk
            with recursive subordinates as (select *, 1 as level, name as sort_path
-                                           from hierarchy.adjacency_list_hierarchy
+                                           from adjacency_list_hierarchy
                                            where id = 1
                                            union
                                            select t.*, level + 1, sort_path || '.' || t.name
-                                           from hierarchy.adjacency_list_hierarchy t
+                                           from adjacency_list_hierarchy t
                                                     inner join subordinates s on s.id = t.parent_id)
            select id, rank, name, sort_path::ltree
            from subordinates
@@ -45,13 +45,13 @@ object AdjacencyListUpdate extends IOApp {
     IO.blocking {
       val query =
         s"""
-           |insert into hierarchy.ltree_hierarchy_doobie
+           |insert into ltree_hierarchy_doobie
            |with recursive subordinates as (select *, 1 as level, name as sort_path
-           |                                from hierarchy.adjacency_list_hierarchy
+           |                                from adjacency_list_hierarchy
            |                                where id = 1
            |                                union
            |                                select t.*, level + 1, sort_path || '.' || t.name
-           |                                from hierarchy.adjacency_list_hierarchy t
+           |                                from adjacency_list_hierarchy t
            |                                         inner join subordinates s on s.id = t.parent_id)
            |select id, rank, name, sort_path::ltree
            |from subordinates

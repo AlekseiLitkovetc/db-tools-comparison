@@ -21,7 +21,7 @@ object AdjacencyListSelect extends IOApp {
 
   private def selectSkunk(limit: Int)(implicit skunkSession: Session[IO]): IO[Unit] =
     IO.blocking {
-      val query = sql"select * from hierarchy.adjacency_list_hierarchy limit $int4"
+      val query = sql"select * from adjacency_list_hierarchy limit $int4"
         .query(int4 *: varchar *: varchar *: int4.opt)
         .to[AdjacencyListUnit]
       skunkSession
@@ -37,7 +37,7 @@ object AdjacencyListSelect extends IOApp {
 
   private def selectDoobie(limit: Int)(implicit transactor: Transactor[IO]): IO[Unit] =
     IO.blocking {
-      val fr = doobie.Fragment(s"select * from hierarchy.adjacency_list_hierarchy limit $limit", List.empty)
+      val fr = doobie.Fragment(s"select * from adjacency_list_hierarchy limit $limit", List.empty)
       fr
         .query[AdjacencyListUnit]
         .to[List]
