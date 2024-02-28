@@ -7,25 +7,25 @@ import doobie.util.transactor.Transactor
 import doobie.*
 import doobie.implicits.*
 import doobie.postgres.implicits.*
-import models.*
+import models.LtreeUnitString
 
-object LtreeExample extends IOApp {
+object LtreeWrongExample extends IOApp {
 
   private def selectLtreeUnit(): IO[Unit] = transactorResource.use { transactor =>
-    val sql = sql"select * from hierarchy.ltree_hierarchy where id = 1"
-    sql.query[LtreeUnit].to[List].transact(transactor).map(println)
+    val sql = sql"select * from hierarchy.ltree_hierarchy where id = 1000001"
+    sql.query[LtreeUnitString].to[List].transact(transactor).map(println)
   }
 
-  private def insertLtreeUnit(u: LtreeUnit): IO[Unit] = transactorResource.use { transactor =>
+  private def insertLtreeUnit(u: LtreeUnitString): IO[Unit] = transactorResource.use { transactor =>
     sql"insert into hierarchy.ltree_hierarchy (id, rank, name, path) values (${u.id}, ${u.rank}, ${u.name}, ${u.path})".update.run
       .transact(transactor)
       .void
   }
 
-  private val ltreeUnit = LtreeUnit(id = 1000001, rank = "test", name = "test", path = "test")
+  private val ltreeUnit = LtreeUnitString(id = 1000001, rank = "test", name = "test", path = "test")
 
   override def run(args: List[String]): IO[ExitCode] = for {
-    _ <- selectLtreeUnit()
     _ <- insertLtreeUnit(ltreeUnit)
+    _ <- selectLtreeUnit()
   } yield ExitCode.Success
 }
