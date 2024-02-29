@@ -25,3 +25,12 @@ lazy val benchmarks = project
     libraryDependencies ++= doobie,
     libraryDependencies += fs2
   )
+
+lazy val hierarchy = project
+  .in(file("hierarchy"))
+  .withId("hierarchy")
+  .settings(
+    libraryDependencies += catsEffect,
+    libraryDependencies += skunk,
+    libraryDependencies ++= doobie
+  )

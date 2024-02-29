@@ -21,5 +21,5 @@ object Dependencies {
     "org.tpolecat" %% "doobie-postgres-circe"
   ).map(_ % doobieVersion)
 
-  lazy val fs2 = "co.fs2" %% "fs2-core" % fs2Version
+  lazy val fs2    = "co.fs2" %% "fs2-core" % fs2Version
 }
