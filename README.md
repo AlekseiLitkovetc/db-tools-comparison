@@ -211,3 +211,21 @@ Let's compare Skunk vs Doobie errors, check out these ones from Doobie for ident
 <br/>
 
 In comparison with Skunk, Doobie's error description looks poor.
+
+# Bonus: options for storing hierarchical data in a relational database.
+
+## materials:
+
+[problem](https://stackoverflow.com/questions/4048151/what-are-the-options-for-storing-hierarchical-data-in-a-relational-database)
+
+[nested set](https://www.sqlservercentral.com/articles/hierarchies-on-steroids-1-convert-an-adjacency-list-to-nested-sets)
+
+[postgre ltree](https://www.postgresql.org/docs/current/ltree.html)
+
+## examples in this project:
+
+[sql ddl, dml](https://github.com/AlekseiLitkovetc/frm-comparison/blob/92ed91b9afb3a1d7709d482c18469add55eafaff/hierarchy/src/main/resources)
+
+[skunk vs doobie for adjacency list](https://github.com/AlekseiLitkovetc/frm-comparison/blob/92ed91b9afb3a1d7709d482c18469add55eafaff/hierarchy/src/main/scala/adjacencylist)
+
+[skunk ltree codec](https://github.com/AlekseiLitkovetc/frm-comparison/blob/92ed91b9afb3a1d7709d482c18469add55eafaff/hierarchy/src/main/scala/ltree/LtreeGoodExample.scala)
